@@ -1,0 +1,107 @@
+--Exploratory Data Analysis using python(Pandas,Matplotlib,Seaborn)--
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Shape and preview
+print("Shape of dataset:", df.shape)
+df.head()
+
+# Info and summary
+df.info()
+df.describe()
+
+# Null values
+df.isnull().sum()
+
+# Unique values
+df.nunique()
+
+# Age
+sns.histplot(df['Age'].dropna(), kde=True)
+plt.title("Age Distribution")
+plt.show()
+
+sns.boxplot(x=df['Age'])
+plt.title("Boxplot of Age")
+plt.show()
+
+# Fare
+sns.histplot(df['Fare'], kde=True)
+plt.title("Fare Distribution")
+plt.show()
+
+sns.boxplot(x=df['Fare'])
+plt.title("Boxplot of Fare")
+plt.show()
+
+# Sex
+sns.countplot(x='Sex', data=df)
+plt.title("Gender Distribution")
+plt.show()
+
+# Pclass
+sns.countplot(x='Pclass', data=df)
+plt.title("Passenger Class Distribution")
+plt.show()
+
+# Survival by Gender
+sns.countplot(x='Survived', hue='Sex', data=df)
+plt.title("Survival Count by Gender")
+plt.show()
+
+# Survival by Class
+sns.countplot(x='Survived', hue='Pclass', data=df)
+plt.title("Survival Count by Passenger Class")
+plt.show()
+
+# Pairplot
+sns.pairplot(df[['Survived', 'Age', 'Fare', 'Pclass']], hue='Survived')
+plt.show()
+
+# Heatmap
+plt.figure(figsize=(10,6))
+sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
+plt.title("Correlation Heatmap")
+plt.show()
+
+# Fill Age with median
+df['Age'].fillna(df['Age'].median(), inplace=True)
+
+# Fill Embarked with mode
+df['Embarked'].fillna(df['Embarked'].mode()[0], inplace=True)
+
+# Drop Cabin due to too many nulls
+df.drop('Cabin', axis=1, inplace=True)
+
+# Drop rows if still null
+df.dropna(inplace=True)
+
+# Pairplot
+sns.pairplot(df[['Survived', 'Age', 'Fare', 'Pclass']], hue='Survived')
+plt.show()
+
+# Heatmap
+plt.figure(figsize=(10,6))
+sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
+plt.title("Correlation Heatmap")
+plt.show()
+
+# Check skew
+df[['Age', 'Fare']].skew()
+
+# Log transformation on Fare if highly skewed
+df['Fare_log'] = np.log1p(df['Fare'])
+
+sns.histplot(df['Fare_log'], kde=True)
+plt.title("Log Transformed Fare")
+plt.show()
+
+### Summary of EDA Findings:
+- Majority of passengers were in 3rd class and male.
+- Females had a significantly higher survival rate.
+- Younger passengers and higher fare payers had higher survival chances.
+- Age and Fare distributions had outliers; Fare was skewed.
+- Pclass and Sex showed strong relationships with survival.
